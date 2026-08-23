@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f2f0e9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="DONE">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<title>DONE</title>
+<style>
+:root{--ink:#171815;--muted:#6d6e67;--paper:#f2f0e9;--card:#fbfaf6;--line:#ddd9cd;--green:#264f3d;--red:#793b35}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{min-height:100vh}
+.app{width:min(100%,430px);margin:auto;min-height:100vh;padding:calc(24px + env(safe-area-inset-top)) 18px calc(96px + env(safe-area-inset-bottom))}
+.top{display:flex;justify-content:space-between;align-items:center}.logo{font-weight:900;letter-spacing:.16em}.avatar{width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800}
+h1{font-size:39px;line-height:1;letter-spacing:-.055em;margin:34px 0 10px}p{color:var(--muted);line-height:1.46}
+.hero{background:var(--green);color:#fff;border-radius:25px;padding:22px;margin:22px 0}.hero small{opacity:.75}.hero b{display:block;font-size:40px;margin:3px 0}.hero span{font-size:12px;opacity:.78}
+h2{font-size:19px;margin:28px 0 10px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin:10px 0}.tag{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--green);font-weight:850}.card h3{font-size:18px;margin:7px 0}.card p{font-size:13px;margin:0}
+.row{display:flex;justify-content:space-between;gap:10px;margin-top:12px;font-size:12px;color:var(--muted)}.row b{color:var(--ink)}
+.btn{width:100%;border:0;background:var(--ink);color:#fff;padding:14px;border-radius:13px;font-weight:850;margin-top:14px}.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.pill{display:inline-block;margin-top:11px;padding:6px 9px;border-radius:999px;background:#e7ece5;color:var(--green);font-size:10px;font-weight:850}
+.screen{display:none}.screen.active{display:block}
+.nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,430px);display:grid;grid-template-columns:repeat(4,1fr);background:rgba(242,240,233,.96);backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:10px 8px calc(10px + env(safe-area-inset-bottom))}
+.nav button{border:0;background:none;font-size:11px;color:var(--muted);padding:7px}.nav button.active{color:var(--ink);font-weight:850}
+.progress{height:7px;background:#e4e0d6;border-radius:8px;overflow:hidden;margin-top:13px}.progress i{display:block;height:100%;background:var(--green)}
+.toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(20px);width:min(calc(100% - 36px),394px);background:var(--ink);color:#fff;padding:13px 15px;border-radius:14px;font-size:12px;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.feed{border-left:2px solid var(--line);padding:0 0 15px 13px;font-size:12px;color:var(--muted)}.feed b{display:block;color:var(--ink);margin-bottom:3px}
+.install{display:none}.install.show{display:block}
+.version{font-size:10px;color:var(--muted);text-align:center;margin-top:24px}
+</style>
+</head>
+<body>
+<main class="app">
+<div class="top"><div class="logo">DONE</div><div class="avatar">K</div></div>
+
+<section id="home" class="screen active">
+<h1>Good afternoon.<br><span id="matterCount">Three</span> things matter.</h1>
+<p>DONE filters the noise and shows only opportunities worth your attention.</p>
+<div class="hero"><small>Potential value this month</small><b id="potential">£420</b><span><span id="oppCount">8</span> opportunities · <span id="adminMins">95</span> minutes of admin</span></div>
+
+<div id="installCard" class="card install">
+<div class="tag">Install DONE</div><h3>Keep it on your Home Screen.</h3><p>This build supports installable-app behaviour when hosted over HTTPS.</p><button class="btn" id="installBtn">Install DONE</button></div>
+
+<h2>Do next</h2>
+<div class="card" id="insurance">
+<div class="tag">98% confidence · approval required</div><h3>Home insurance renewal increased £76</h3>
+<p id="insuranceText">Your renewal is £412. Last year was £336. DONE can prepare a comparison without changing anything.</p>
+<div class="row"><span>Potential value <b>£76/year</b></span><span>About <b>4 min</b></span></div>
+<button class="btn" id="insuranceBtn">Prepare comparison</button>
+</div>
+
+<div class="card">
+<div class="tag">99% confidence · automatic</div><h3>Flight check-in opens tomorrow</h3>
+<p>A reminder can be scheduled automatically because the action is low-risk and reversible.</p>
+<button class="btn secondary" id="reminderBtn">Schedule reminder</button>
+</div>
+</section>
+
+<section id="done" class="screen">
+<h1>What DONE<br>has handled.</h1>
+<div class="hero"><small>Verified value</small><b id="saved">£0</b><span id="time">0 minutes recovered</span></div>
+<h2>Evidence ledger</h2><div id="ledger"></div>
+</section>
+
+<section id="discover" class="screen">
+<h1>DONE is<br>still looking.</h1><p>The scan view makes uncertainty visible instead of pretending the system instantly knows everything.</p>
+<div class="card"><div class="tag">Scan status</div><h3 id="scanTitle">4 of 6 signal types checked</h3><p id="scanText">Bills, renewals, calendar and travel checked. Warranties and household documents remain unavailable.</p><div class="progress"><i id="bar" style="width:66%"></i></div><button class="btn" id="scanBtn">Continue scan</button></div>
+<h2>Connections</h2><div class="card"><div class="row"><span>Email</span><b>DEMO DATA</b></div><div class="row"><span>Calendar</span><b>DEMO DATA</b></div><div class="row"><span>Payments</span><b>NOT CONNECTED</b></div><div class="row"><span>Documents</span><b>NOT CONNECTED</b></div></div>
+</section>
+
+<section id="me" class="screen">
+<h1>Your rules.</h1><p>Autonomy is useful only when you know what DONE is allowed to do.</p>
+<div class="card"><div class="tag">Permission policy</div><h3>Ask before anything consequential.</h3><div class="row"><span>Read authorised signals</span><b>AUTO</b></div><div class="row"><span>Create reminders</span><b>AUTO</b></div><div class="row"><span>Prepare comparisons</span><b>AUTO</b></div><div class="row"><span>Switch provider</span><b>ASK</b></div><div class="row"><span>Spend money</span><b>ASK</b></div><div class="row"><span>Publish/share publicly</span><b>ASK</b></div></div>
+<h2>Activity</h2><div id="activity"></div>
+<button class="btn secondary" id="resetBtn">Reset local prototype data</button>
+<div class="version">DONE v1.5 · PWA build</div>
+</section>
+</main>
+
+<nav class="nav">
+<button class="active" data-screen="home">Home</button><button data-screen="done">Done</button><button data-screen="discover">Discover</button><button data-screen="me">Me</button>
+</nav>
+<div id="toast" class="toast"></div>
+<script>
+const KEY='done_v15_state';
+const defaults={verified:0,minutes:0,potential:420,prepared:false,scanComplete:false,reminder:false,activity:[{t:'DONE started',d:'No external accounts are connected in this prototype.'}]};
+let state={...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')};
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),2200)}
+function log(t,d){state.activity.unshift({t,d});save();renderActivity()}
+function renderActivity(){document.getElementById('activity').innerHTML=state.activity.map(x=>`<div class="feed"><b>${x.t}</b>${x.d}</div>`).join('')}
+function renderLedger(){
+ const l=document.getElementById('ledger');
+ if(!state.verified){l.innerHTML='<div class="card"><div class="tag">No verified outcomes yet</div><h3>Potential isn’t savings.</h3><p>DONE only moves value into this ledger after an outcome has evidence.</p></div>'}
+ else{l.innerHTML='<div class="card"><div class="tag">Verified outcome</div><h3>Home insurance · £76/year</h3><p>Recorded only after the outcome was explicitly verified in this prototype.</p><span class="pill">EVIDENCE RECORDED</span></div>'}
+}
+function render(){
+ document.getElementById('saved').textContent='£'+state.verified;
+ document.getElementById('time').textContent=state.minutes+' minutes recovered';
+ document.getElementById('potential').textContent='£'+state.potential;
+ document.getElementById('insuranceText').textContent=state.prepared?'Comparison prepared. No provider has been switched and no money has been spent.':'Your renewal is £412. Last year was £336. DONE can prepare a comparison without changing anything.';
+ document.getElementById('insuranceBtn').textContent=state.prepared?'Mark outcome verified':'Prepare comparison';
+ document.getElementById('scanTitle').textContent=state.scanComplete?'6 of 6 demo signal types checked':'4 of 6 signal types checked';
+ document.getElementById('scanText').textContent=state.scanComplete?'Demo scan complete. Real warranties/documents still require authenticated connectors.':'Bills, renewals, calendar and travel checked. Warranties and household documents remain unavailable.';
+ document.getElementById('bar').style.width=state.scanComplete?'100%':'66%';
+ document.getElementById('reminderBtn').textContent=state.reminder?'Reminder scheduled':'Schedule reminder';
+ renderLedger();renderActivity();
+}
+document.getElementById('insuranceBtn').onclick=()=>{
+ if(!state.prepared){state.prepared=true;save();log('Comparison prepared','Home insurance · no external action taken.');toast('Prepared — nothing changed without you.');render()}
+ else if(!state.verified){state.verified=76;state.minutes=30;state.potential=344;save();log('Verified value recorded','£76/year · 30 minutes.');toast('Verified value added to the ledger.');render()}
+ else toast('Outcome already verified.');
+};
+document.getElementById('reminderBtn').onclick=()=>{if(!state.reminder){state.reminder=true;save();log('Reminder scheduled','Flight check-in · demo reminder only.');render()}toast('Demo reminder scheduled.')};
+document.getElementById('scanBtn').onclick=()=>{state.scanComplete=true;save();log('Scan completed','Demo signal scan reached 100%.');render();toast('Demo scan complete.')};
+document.getElementById('resetBtn').onclick=()=>{localStorage.removeItem(KEY);state={...defaults,activity:[...defaults.activity]};render();toast('Prototype data reset.')};
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(b.dataset.screen).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');window.scrollTo({top:0,behavior:'smooth'})});
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('installCard').classList.add('show')});
+document.getElementById('installBtn').onclick=async()=>{if(!deferredPrompt){toast('Use your browser’s Add to Home Screen option.');return}deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;document.getElementById('installCard').classList.remove('show')};
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}))}
+render();
+</script>
+</body></html>
